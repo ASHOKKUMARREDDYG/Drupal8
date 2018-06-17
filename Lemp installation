@@ -1,0 +1,46 @@
+		How to install Drupal in ubantu...
+Step 1 – Installing the Nginx Web Server
+
+sudo apt update
+sudo apt install nginx
+
+Step 2 – Installing MySQL to Manage Site Data
+
+sudo apt install mysql-server
+sudo mysql_secure_installation
+
+Step 3 – Installing PHP for Processing
+
+sudo apt install php-fpm php-mysql
+
+Open the main php-fpm configuration file with root privileges:
+sudo nano /etc/php/7.2/fpm/php.ini
+set path:cgi.fix_pathinfo=0
+
+sudo nano /etc/nginx/sites-available/default
+change to this:
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.php index.html index.htm index.nginx-debian.html;
+
+    server_name your_server_domain_or_IP;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+
+
+Done..
